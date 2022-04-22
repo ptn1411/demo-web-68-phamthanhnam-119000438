@@ -6,18 +6,33 @@ db.run(
   "CREATE TABLE if not exists category_new_id (id INTEGER PRIMARY KEY,new_id INT,category_id INT)"
 );
 
-const db = require("../model/db");
-
-let createNews = (Title, ImageUrl, Content, Author) => {
+let createNews = (Title, ImageUrl, Content, Author, category_id) => {
   return new Promise((resolve, reject) => {
     db.run(
       "INSERT INTO `News` (Title,ImageUrl,Content,Author,CreatedAt) VALUES(?, ?,?,?,?)",
       [Title, ImageUrl, Content, Author, Date.now()],
-      (err, row) => {
+      (err) => {
         if (err) {
           reject(err.message);
         }
-        resolve(row);
+        db.get(
+          "SELECT * FROM `News` ORDER BY id DESC LIMIT 1",
+          (err2, row2) => {
+            console.log(
+              "Row was added to the table: " + JSON.stringify(row2.id)
+            );
+            db.run(
+              "INSERT INTO `category_new_id` (new_id,category_id) VALUES(?, ?)",
+              [row2.id, category_id],
+              (err3) => {
+                if (err3) {
+                  reject(err3.message);
+                }
+                resolve(row2);
+              }
+            );
+          }
+        );
       }
     );
   });
