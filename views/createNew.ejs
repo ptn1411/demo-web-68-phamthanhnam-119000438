@@ -12,7 +12,9 @@
   </head>
   <body>
     <%- include('partials/nav.ejs') %>
-    <h1><%= title %></h1>
+    <main class="container">
+
+
     <form action="/create" method="post">
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Title</label>
@@ -23,9 +25,6 @@
           name="title"
           aria-describedby="emailHelp"
         />
-        <div id="emailHelp" class="form-text">
-          We'll never share your email with anyone else.
-        </div>
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Imgae</label>
@@ -48,12 +47,13 @@
           style="height: 100px"
           name="content"
         ></textarea>
-        <label for="floatingTextarea2">Comments</label>
+        <label for="floatingTextarea2">Content</label>
       </div>
       <input type="hidden" name="category" id="categoryid" />
+      <div class="mb-3">
       <select
         id="dropDownId"
-        class="form-select"
+        class="form-select p-2"
         aria-label="Default select example"
       >
         <option selected>Open this select Categorys</option>
@@ -61,8 +61,10 @@
         <option value="<%= item.id %>"><%= item.name %></option>
         <% } %>
       </select>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      <button type="submit" class="btn btn-primary p-2">Submit</button>
     </form>
+    </main>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

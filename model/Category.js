@@ -1,15 +1,38 @@
 const db = require("../model/db");
-db.run("CREATE TABLE if not exists Categorys (id INT KEY,name TEXT)");
+
 let createCategory = (name) => {
   return new Promise((resolve, reject) => {
     db.run(
-      "INSERT INTO Categorys(id, name) VALUES(?, ?)",
-      [Date.now(), name],
+      "INSERT INTO Categorys(name) VALUES( ?)",
+      [name],
       (err, row) => {
         if (err) {
           reject(err.message);
         }
         resolve(row);
+      }
+    );
+  });
+};
+let getCategoryByNewId = (id) => {
+  return new Promise((resolve, reject) => {
+    db.get(
+      "SELECT * FROM `category_new_id` WHERE new_id = ?",
+      [id],
+      (err, row) => {
+        if (err) {
+          reject(err.message);
+        }
+        db.get(
+          "SELECT * FROM `categorys` WHERE id = ?",
+          [row.category_id],
+          (err, row) => {
+            if (err) {
+              reject(err.message);
+            }
+            resolve(row);
+          }
+        );
       }
     );
   });
@@ -55,4 +78,5 @@ module.exports = {
   getCategory,
   updateCategory,
   deteleCategory,
+  getCategoryByNewId
 };

@@ -1,10 +1,4 @@
 const db = require("../model/db");
-db.run(
-  "CREATE TABLE if not exists News (id INTEGER PRIMARY KEY,Title STRING,ImageUrl STRING,Content TEXT,Author STRING,CreatedAt INT)"
-);
-db.run(
-  "CREATE TABLE if not exists category_new_id (id INTEGER PRIMARY KEY,new_id INT,category_id INT)"
-);
 
 let createNews = (Title, ImageUrl, Content, Author, category_id) => {
   return new Promise((resolve, reject) => {
@@ -49,11 +43,19 @@ let getNews = () => {
     });
   });
 };
-let updateNews = (name, id) => {
+let getNewsById = (id) => {
+    return new Promise((resolve, reject) => {
+        db.get("SELECT * FROM News WHERE `id`=?",[id], (err, rows) => {
+            if (err) reject(err);
+            resolve(rows);
+        });
+    });
+};
+let updateNews = (Title,ImageUrl,Content,Author, id) => {
   return new Promise((resolve, reject) => {
     db.all(
-      "UPDATE `News` SET `name`=? WHERE `id`=?",
-      [name, id],
+      "UPDATE `News` SET `Title`=?, `ImageUrl`=? ,`Content`=?,`Author`=? WHERE `id`=?",
+      [Title,ImageUrl,Content,Author, id],
       (err, row) => {
         if (err) {
           console.log(err);
@@ -66,11 +68,17 @@ let updateNews = (name, id) => {
 };
 let deteleNews = (id) => {
   return new Promise((resolve, reject) => {
-    db.run("DELETE FROM Categorys WHERE id=?", [id], (err, row) => {
+    db.run("DELETE FROM category_new_id WHERE new_id=?", [id], (err, row) => {
       if (err) {
         reject(err.message);
       }
-      resolve(row);
+      db.run("DELETE FROM News WHERE id=?", [id], (err, row) => {
+        if (err) {
+          reject(err.message);
+        }
+        resolve(row);
+      });
+
     });
   });
 };
@@ -79,4 +87,5 @@ module.exports = {
   getNews,
   updateNews,
   deteleNews,
+    getNewsById
 };
