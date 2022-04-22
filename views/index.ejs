@@ -16,17 +16,18 @@
     <p>Welcome to <%= title %></p>
 
     <% for (item of data) { %>
-      <%= JSON.stringify(item) %>
+
     <div class="card">
       <img
-        src="<%= item.image %>"
+        src="<%= item.ImageUrl %>"
         class="card-img-top"
-        alt="<%= item.title %>"
+        alt="<%= item.Title %>"
       />
       <div class="card-body">
-        <h5 class="card-title"><%= item.title %></h5>
-        <p class="card-text"><%= item.author %></p>
-        <p class="card-text"><%= item.author %></p>
+        <h5 class="card-title"><%= item.Title %></h5>
+        <p class="card-text"><%= item.Content %></p>
+        <p class="card-text"><%= item.Author %></p>
+        <p class="card-text"><%= item.CreatedAt %></p>
       </div>
     </div>
     <% } %>
